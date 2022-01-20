@@ -7,15 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FD438EA12799727400C36497 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD438EA02799727400C36497 /* TextFieldTableViewCell.swift */; };
+		FD438EA4279973B800C36497 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD438EA3279973B800C36497 /* CustomTextField.swift */; };
 		FD61B7D22799665000C63F7A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7D12799665000C63F7A /* AppDelegate.swift */; };
 		FD61B7D42799665000C63F7A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7D32799665000C63F7A /* SceneDelegate.swift */; };
 		FD61B7D62799665000C63F7A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7D52799665000C63F7A /* ViewController.swift */; };
 		FD61B7DC2799665000C63F7A /* To_do_Demo_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7DA2799665000C63F7A /* To_do_Demo_App.xcdatamodeld */; };
 		FD61B7DE2799665200C63F7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD61B7DD2799665200C63F7A /* Assets.xcassets */; };
 		FD61B7E12799665200C63F7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD61B7DF2799665200C63F7A /* LaunchScreen.storyboard */; };
+		FD61B7F027996CB800C63F7A /* NewTaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7EF27996CB800C63F7A /* NewTaskController.swift */; };
+		FD61B7F527996CF300C63F7A /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7F427996CF300C63F7A /* UIView+Layout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FD438EA02799727400C36497 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		FD438EA3279973B800C36497 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		FD61B7CE2799665000C63F7A /* To-do Demo App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "To-do Demo App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD61B7D12799665000C63F7A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FD61B7D32799665000C63F7A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +30,8 @@
 		FD61B7DD2799665200C63F7A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FD61B7E02799665200C63F7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD61B7E22799665200C63F7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FD61B7EF27996CB800C63F7A /* NewTaskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskController.swift; sourceTree = "<group>"; };
+		FD61B7F427996CF300C63F7A /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +66,49 @@
 			children = (
 				FD61B7D12799665000C63F7A /* AppDelegate.swift */,
 				FD61B7D32799665000C63F7A /* SceneDelegate.swift */,
-				FD61B7D52799665000C63F7A /* ViewController.swift */,
+				FD61B7EC27996C9400C63F7A /* Model */,
+				FD61B7ED27996C9B00C63F7A /* View */,
+				FD61B7EE27996CA100C63F7A /* Controller */,
+				FD61B7F327996CE100C63F7A /* Helpers */,
 				FD61B7DD2799665200C63F7A /* Assets.xcassets */,
 				FD61B7DF2799665200C63F7A /* LaunchScreen.storyboard */,
 				FD61B7E22799665200C63F7A /* Info.plist */,
 				FD61B7DA2799665000C63F7A /* To_do_Demo_App.xcdatamodeld */,
 			);
 			path = "To-do Demo App";
+			sourceTree = "<group>";
+		};
+		FD61B7EC27996C9400C63F7A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FD61B7ED27996C9B00C63F7A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FD438EA02799727400C36497 /* TextFieldTableViewCell.swift */,
+				FD438EA3279973B800C36497 /* CustomTextField.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FD61B7EE27996CA100C63F7A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FD61B7D52799665000C63F7A /* ViewController.swift */,
+				FD61B7EF27996CB800C63F7A /* NewTaskController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		FD61B7F327996CE100C63F7A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				FD61B7F427996CF300C63F7A /* UIView+Layout.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +182,11 @@
 			files = (
 				FD61B7DC2799665000C63F7A /* To_do_Demo_App.xcdatamodeld in Sources */,
 				FD61B7D62799665000C63F7A /* ViewController.swift in Sources */,
+				FD438EA12799727400C36497 /* TextFieldTableViewCell.swift in Sources */,
+				FD61B7F527996CF300C63F7A /* UIView+Layout.swift in Sources */,
+				FD438EA4279973B800C36497 /* CustomTextField.swift in Sources */,
 				FD61B7D22799665000C63F7A /* AppDelegate.swift in Sources */,
+				FD61B7F027996CB800C63F7A /* NewTaskController.swift in Sources */,
 				FD61B7D42799665000C63F7A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
