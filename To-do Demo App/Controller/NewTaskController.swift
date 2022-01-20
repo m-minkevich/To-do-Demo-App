@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NewTaskController: UITableViewController {
     
@@ -50,6 +51,23 @@ class NewTaskController: UITableViewController {
     
     @objc fileprivate func handleSave() {
         print("Time to save!")
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: managedContext) else { return }
+        let task = Task(entity: entity, insertInto: managedContext)
+        task.title = "Modified title"
+//        let task = NSManagedObject(entity: entity, insertInto: managedContext)
+//        task.setValue("New sample task", forKey: "title")
+        
+        do {
+            try managedContext.save()
+            print("Successfully saved!")
+        } catch {
+            // TO-DO: handle error
+            print("Failed to save!")
+        }
     }
     
     @objc fileprivate func handleDismiss() {
