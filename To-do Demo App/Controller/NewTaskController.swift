@@ -8,7 +8,13 @@
 import UIKit
 import CoreData
 
-class NewTaskController: UITableViewController {
+class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelegate {
+    
+    fileprivate var taskTitle: String?
+    fileprivate var taskDate: Date?
+    fileprivate var taskCategory: String?
+    
+    fileprivate let categories = ["Zakupy", "Praca", "Inne"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,9 +50,38 @@ class NewTaskController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = TextFieldTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textField.placeholder = "Obowiązkowe"
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = TextFieldTableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textField.placeholder = "Obowiązkowe"
+            cell.textField.addTarget(self, action: #selector(handleTitleChange), for: .editingChanged)
+            return cell
+        case 1:
+            let cell = DatePickerTextFieldTableViewCell(style: .default, reuseIdentifier: nil)
+            cell.backgroundColor = .red
+            cell.textField.placeholder = "Obowiązkowe"
+            cell.delegate = self
+            return cell
+        default:
+            let cell = PickerTextFieldTableViewCell(style: .default, reuseIdentifier: nil)
+            cell.backgroundColor = .green
+            cell.textField.placeholder = "Obowiązkowe"
+            cell.delegate = self
+            cell.items = categories
+            return cell
+        }
+    }
+    
+    @objc fileprivate func handleTitleChange(textField: UITextField) {
+        taskTitle = textField.text
+    }
+    
+    func didSelectDate(_ date: Date) {
+        taskDate = date
+    }
+    
+    func didSelectItem(_ item: String) {
+        taskCategory = item
     }
     
     @objc fileprivate func handleSave() {
@@ -57,9 +92,9 @@ class NewTaskController: UITableViewController {
         
         guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: managedContext) else { return }
         let task = Task(entity: entity, insertInto: managedContext)
-        task.title = "Modified title"
-//        let task = NSManagedObject(entity: entity, insertInto: managedContext)
-//        task.setValue("New sample task", forKey: "title")
+        task.title = taskTitle
+        task.category = taskCategory
+        task.date = taskDate
         
         do {
             try managedContext.save()
@@ -75,3 +110,7 @@ class NewTaskController: UITableViewController {
     }
     
 }
+
+
+
+

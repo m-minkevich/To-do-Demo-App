@@ -19,6 +19,8 @@
 		FD61B7E12799665200C63F7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD61B7DF2799665200C63F7A /* LaunchScreen.storyboard */; };
 		FD61B7F027996CB800C63F7A /* NewTaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7EF27996CB800C63F7A /* NewTaskController.swift */; };
 		FD61B7F527996CF300C63F7A /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7F427996CF300C63F7A /* UIView+Layout.swift */; };
+		FD9F515B279AD02800CF455E /* PickerTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */; };
+		FD9F515E279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		FD61B7E22799665200C63F7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD61B7EF27996CB800C63F7A /* NewTaskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskController.swift; sourceTree = "<group>"; };
 		FD61B7F427996CF300C63F7A /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
+		FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerTextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerTextFieldTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,8 @@
 			children = (
 				FD438EA02799727400C36497 /* TextFieldTableViewCell.swift */,
 				FD438EA3279973B800C36497 /* CustomTextField.swift */,
+				FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */,
+				FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -186,10 +192,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD9F515B279AD02800CF455E /* PickerTextFieldTableViewCell.swift in Sources */,
 				FD61B7DC2799665000C63F7A /* To_do_Demo_App.xcdatamodeld in Sources */,
 				FD438EA927998BCB00C36497 /* Task+CoreDataClass.swift in Sources */,
 				FD61B7D62799665000C63F7A /* TasksListController.swift in Sources */,
 				FD438EA12799727400C36497 /* TextFieldTableViewCell.swift in Sources */,
+				FD9F515E279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift in Sources */,
 				FD61B7F527996CF300C63F7A /* UIView+Layout.swift in Sources */,
 				FD438EA4279973B800C36497 /* CustomTextField.swift in Sources */,
 				FD61B7D22799665000C63F7A /* AppDelegate.swift in Sources */,

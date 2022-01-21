@@ -38,9 +38,9 @@ class TasksListController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
         cell.textLabel?.text = tasks[indexPath.row].title
-//        cell.textLabel?.text = tasks[indexPath.row].value(forKey: "title") as? String ?? ""
+        cell.detailTextLabel?.text = "\(tasks[indexPath.row].category) - \(tasks[indexPath.row].date)"
         return cell
     }
     
@@ -53,13 +53,9 @@ class TasksListController: UITableViewController {
         let managedContext = appDelegate.persistentContainer.viewContext
         
         let request: NSFetchRequest<Task> = Task.fetchRequest()
-//        let request = NSFetchRequest<NSManagedObject>(entityName: "Task")
         
         do {
-//            let objects = try managedContext.fetch(request)
             tasks = try managedContext.fetch(request)
-//            print("Successfully fetched: ", objects)
-//            tasks = objects
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
