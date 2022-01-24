@@ -21,6 +21,8 @@
 		FD61B7F527996CF300C63F7A /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7F427996CF300C63F7A /* UIView+Layout.swift */; };
 		FD9F515B279AD02800CF455E /* PickerTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */; };
 		FD9F515E279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */; };
+		FD9F5161279AE8FA00CF455E /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9F5160279AE8FA00CF455E /* TaskTableViewCell.swift */; };
+		FD9F5165279CBAEE00CF455E /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9F5164279CBAEE00CF455E /* TaskViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		FD61B7F427996CF300C63F7A /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerTextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerTextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		FD9F5160279AE8FA00CF455E /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		FD9F5164279CBAEE00CF455E /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,7 @@
 				FD61B7D12799665000C63F7A /* AppDelegate.swift */,
 				FD61B7D32799665000C63F7A /* SceneDelegate.swift */,
 				FD61B7EC27996C9400C63F7A /* Model */,
+				FD9F5163279CBADA00CF455E /* View Model */,
 				FD61B7ED27996C9B00C63F7A /* View */,
 				FD61B7EE27996CA100C63F7A /* Controller */,
 				FD61B7F327996CE100C63F7A /* Helpers */,
@@ -102,6 +107,7 @@
 				FD438EA3279973B800C36497 /* CustomTextField.swift */,
 				FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */,
 				FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */,
+				FD9F5160279AE8FA00CF455E /* TaskTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -121,6 +127,14 @@
 				FD61B7F427996CF300C63F7A /* UIView+Layout.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		FD9F5163279CBADA00CF455E /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				FD9F5164279CBAEE00CF455E /* TaskViewModel.swift */,
+			);
+			path = "View Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +207,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD9F515B279AD02800CF455E /* PickerTextFieldTableViewCell.swift in Sources */,
+				FD9F5165279CBAEE00CF455E /* TaskViewModel.swift in Sources */,
+				FD9F5161279AE8FA00CF455E /* TaskTableViewCell.swift in Sources */,
 				FD61B7DC2799665000C63F7A /* To_do_Demo_App.xcdatamodeld in Sources */,
 				FD438EA927998BCB00C36497 /* Task+CoreDataClass.swift in Sources */,
 				FD61B7D62799665000C63F7A /* TasksListController.swift in Sources */,

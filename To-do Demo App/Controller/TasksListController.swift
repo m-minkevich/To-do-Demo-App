@@ -10,7 +10,8 @@ import CoreData
 
 class TasksListController: UITableViewController {
     
-    fileprivate var tasks = [Task]()
+//    fileprivate var tasks = [Task]()
+    fileprivate var taskViewModels = [TaskViewModel]()
     
     fileprivate let cellId = "cellId"
 
@@ -20,7 +21,7 @@ class TasksListController: UITableViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Dodaj", style: .plain, target: self, action: #selector(handleAddTask))
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(TaskTableViewCell.self, forCellReuseIdentifier: cellId)
         
         fetchTasks()
     }
@@ -34,18 +35,26 @@ class TasksListController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
+        return taskViewModels.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
-        cell.textLabel?.text = tasks[indexPath.row].title
-        cell.detailTextLabel?.text = "\(tasks[indexPath.row].category) - \(tasks[indexPath.row].date)"
+        let cell = TaskTableViewCell(style: .subtitle, reuseIdentifier: cellId)
+        cell.taskViewModel = taskViewModels[indexPath.row]
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        deleteTask(indexPath: indexPath)
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let contextItem = UIContextualAction(style: .destructive, title: "Usuń") {  [weak self] (contextualAction, view, boolValue) in
+            self?.deleteTask(indexPath: indexPath)
+        }
+        let swipeActions = UISwipeActionsConfiguration(actions: [contextItem])
+
+        return swipeActions
     }
     
     fileprivate func fetchTasks() {
@@ -55,7 +64,8 @@ class TasksListController: UITableViewController {
         let request: NSFetchRequest<Task> = Task.fetchRequest()
         
         do {
-            tasks = try managedContext.fetch(request)
+//            tasks = try managedContext.fetch(request)
+            taskViewModels = try managedContext.fetch(request).map({ $0.toTaskViewModel() })
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -67,18 +77,23 @@ class TasksListController: UITableViewController {
     
     fileprivate func deleteTask(indexPath: IndexPath) {
         print("Delete at: ", indexPath)
-        let task = tasks[indexPath.row]
+//        Delete by id???
+////        let task = tasks[indexPath.row]
+//        let taskViewModel = taskViewModels[indexPath.row]
+//
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//
+//        managedContext.delete(taskViewModel)
+//        taskViewModels.remove(at: indexPath.row)
+//        appDelegate.saveContext()
+//
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//        }
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        managedContext.delete(task)
-        tasks.remove(at: indexPath.row)
-        appDelegate.saveContext()
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        taskViewModels.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
         
     }
 
