@@ -11,6 +11,7 @@
 		FD438EA4279973B800C36497 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD438EA3279973B800C36497 /* CustomTextField.swift */; };
 		FD438EA927998BCB00C36497 /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD438EA727998BCB00C36497 /* Task+CoreDataClass.swift */; };
 		FD438EAA27998BCB00C36497 /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD438EA827998BCB00C36497 /* Task+CoreDataProperties.swift */; };
+		FD4F50B2279EDD8800A9B127 /* NewTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4F50B1279EDD8800A9B127 /* NewTaskViewModel.swift */; };
 		FD61B7D22799665000C63F7A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7D12799665000C63F7A /* AppDelegate.swift */; };
 		FD61B7D42799665000C63F7A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7D32799665000C63F7A /* SceneDelegate.swift */; };
 		FD61B7D62799665000C63F7A /* TasksListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD61B7D52799665000C63F7A /* TasksListController.swift */; };
@@ -30,6 +31,7 @@
 		FD438EA3279973B800C36497 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		FD438EA727998BCB00C36497 /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		FD438EA827998BCB00C36497 /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FD4F50B1279EDD8800A9B127 /* NewTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskViewModel.swift; sourceTree = "<group>"; };
 		FD61B7CE2799665000C63F7A /* To-do Demo App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "To-do Demo App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD61B7D12799665000C63F7A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FD61B7D32799665000C63F7A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				FD9F5164279CBAEE00CF455E /* TaskViewModel.swift */,
+				FD4F50B1279EDD8800A9B127 /* NewTaskViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				FD9F5161279AE8FA00CF455E /* TaskTableViewCell.swift in Sources */,
 				FD61B7DC2799665000C63F7A /* To_do_Demo_App.xcdatamodeld in Sources */,
 				FD438EA927998BCB00C36497 /* Task+CoreDataClass.swift in Sources */,
+				FD4F50B2279EDD8800A9B127 /* NewTaskViewModel.swift in Sources */,
 				FD61B7D62799665000C63F7A /* TasksListController.swift in Sources */,
 				FD438EA12799727400C36497 /* TextFieldTableViewCell.swift in Sources */,
 				FD9F515E279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift in Sources */,

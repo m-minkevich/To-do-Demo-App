@@ -8,11 +8,15 @@
 import UIKit
 import CoreData
 
+protocol RefreshTasksDelegate: class {
+    func refreshTasks()
+}
+
 class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelegate {
     
-    fileprivate var taskTitle: String?
-    fileprivate var taskDate: Date?
-    fileprivate var taskCategory: String?
+    weak var delegate: RefreshTasksDelegate?
+    
+    fileprivate let newTaskViewModel = NewTaskViewModel()
     
     fileprivate let categories = ["Zakupy", "Praca", "Inne"]
     
@@ -22,6 +26,16 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Anuluj", style: .done, target: self, action: #selector(handleDismiss))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Zapisz", style: .plain, target: self, action: #selector(handleSave))
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        setupNewTaskViewModelObserver()
+    }
+    
+    fileprivate func setupNewTaskViewModelObserver() {
+        newTaskViewModel.isValidObserver = { (isValid) in
+            print(isValid)
+            self.navigationItem.rightBarButtonItem?.isEnabled = isValid
+        }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -73,15 +87,15 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
     }
     
     @objc fileprivate func handleTitleChange(textField: UITextField) {
-        taskTitle = textField.text
+        newTaskViewModel.title = textField.text ?? ""
     }
     
     func didSelectDate(_ date: Date) {
-        taskDate = date
+        newTaskViewModel.date = date
     }
     
     func didSelectItem(_ item: String) {
-        taskCategory = item
+        newTaskViewModel.category = item
     }
     
     @objc fileprivate func handleSave() {
@@ -92,13 +106,16 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         
         guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: managedContext) else { return }
         let task = Task(entity: entity, insertInto: managedContext)
-        task.title = taskTitle
-        task.category = taskCategory
-        task.date = taskDate
+        task.title = newTaskViewModel.title
+        task.category = newTaskViewModel.category
+        task.date = newTaskViewModel.date
         
         do {
             try managedContext.save()
             print("Successfully saved!")
+            dismiss(animated: true) { [weak self] in
+                self?.delegate?.refreshTasks()
+            }
         } catch {
             // TO-DO: handle error
             print("Failed to save!")

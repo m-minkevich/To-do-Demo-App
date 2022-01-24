@@ -8,9 +8,8 @@
 import UIKit
 import CoreData
 
-class TasksListController: UITableViewController {
+class TasksListController: UITableViewController, RefreshTasksDelegate {
     
-//    fileprivate var tasks = [Task]()
     fileprivate var taskViewModels = [TaskViewModel]()
     
     fileprivate let cellId = "cellId"
@@ -28,6 +27,7 @@ class TasksListController: UITableViewController {
     
     @objc fileprivate func handleAddTask() {
         let newTaskController = NewTaskController()
+        newTaskController.delegate = self
         let navController = UINavigationController(rootViewController: newTaskController)
         navController.modalPresentationStyle = .fullScreen
         
@@ -57,6 +57,10 @@ class TasksListController: UITableViewController {
         return swipeActions
     }
     
+    func refreshTasks() {
+        fetchTasks()
+    }
+    
     fileprivate func fetchTasks() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -64,7 +68,6 @@ class TasksListController: UITableViewController {
         let request: NSFetchRequest<Task> = Task.fetchRequest()
         
         do {
-//            tasks = try managedContext.fetch(request)
             taskViewModels = try managedContext.fetch(request).map({ $0.toTaskViewModel() })
             DispatchQueue.main.async {
                 self.tableView.reloadData()
