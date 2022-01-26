@@ -12,8 +12,6 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
     
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
     
-//    fileprivate var taskViewModels = [TaskViewModel]() { didSet { checkNumberOfTaskViewModels() } }
-    
     fileprivate var groupedTaskViewModels = [[TaskViewModel]]() { didSet { checkNumberOfTaskViewModels() } }
     
     fileprivate let cellId = "cellId"
@@ -25,7 +23,6 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         setupTableView()
         setupNoTasksLabel()
         fetchTasks()
-//        deleteAllData()
     }
     
     fileprivate func setupNavBar() {
@@ -101,12 +98,15 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let contextItem = UIContextualAction(style: .destructive, title: "Usuń") {  [weak self] (contextualAction, view, boolValue) in
-            self?.deleteTask(indexPath: indexPath)
+        let action = UIContextualAction(style: .destructive, title: "Usuń") { (_, _, completion) in
+            self.handleDeleteTask(indexPath: indexPath)
+            completion(true)
         }
-        let swipeActions = UISwipeActionsConfiguration(actions: [contextItem])
+        
+        let swipeConfig = UISwipeActionsConfiguration(actions: [action])
+        swipeConfig.performsFirstActionWithFullSwipe = false
 
-        return swipeActions
+        return swipeConfig
     }
     
     func refreshTasks() {
@@ -122,13 +122,12 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         do {
             let tasks = try managedContext.fetch(request)
             groupedTaskViewModels = convertToGroupedViewModels(tasks: tasks)
-            
+
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         } catch {
-            // TO-DO: handle error
-            print("Failed to fetch!")
+            showErrorAlert()
         }
     }
     
@@ -147,8 +146,21 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         return groupedViewModels
     }
     
+    fileprivate func handleDeleteTask(indexPath: IndexPath) {
+        let alertController = UIAlertController(title: "Na pewno chcesz usunąć?", message: nil, preferredStyle: .alert)
+        
+        alertController.addAction(.init(title: "Nie, dziękuję", style: .cancel))
+        alertController.addAction(.init(title: "Usuń", style: .destructive, handler: { _ in
+            self.deleteTask(indexPath: indexPath)
+        }))
+        
+        self.present(alertController, animated: true)
+    }
+    
     fileprivate func deleteTask(indexPath: IndexPath) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        tableView.beginUpdates()
+        
         let managedContext = appDelegate.persistentContainer.viewContext
         
         let task = groupedTaskViewModels[indexPath.section][indexPath.row].task
@@ -157,33 +169,19 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         groupedTaskViewModels[indexPath.section].remove(at: indexPath.row)
         appDelegate.saveContext()
         
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-        
+        tableView.deleteRows(at: [indexPath], with: .left)
+        tableView.endUpdates()
     }
     
-    
-    func deleteAllData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
+    fileprivate func showErrorAlert() {
+        let alertController = UIAlertController(title: "Nie udało się pobrać", message: nil, preferredStyle: .alert)
         
-        let request: NSFetchRequest<Task> = Task.fetchRequest()
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
-        request.returnsObjectsAsFaults = false
-        do {
-//            let results = try dataController.viewContext.fetch(fetchRequest)
-            let tasks = try managedContext.fetch(request)
-            for t in tasks {
-//                guard let objectData = t as? NSManagedObject else {continue}
-//                dataController.viewContext.delete(objectData)
-                managedContext.delete(t)
-            }
-            appDelegate.saveContext()
-        } catch let error {
-            print("Detele all data in ... error :", error)
-        }
+        alertController.addAction(.init(title: "Powtórz", style: .default, handler: { _ in
+            self.fetchTasks()
+        }))
+        
+        self.present(alertController, animated: true)
     }
-    
-    
 
 
 }

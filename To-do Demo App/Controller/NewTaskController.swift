@@ -25,7 +25,7 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         setupNavBar()
         setupNavButtons()
         setupTableView()
-        setupNewTaskViewModelObserver()
+        setupNewTaskViewModelObservers()
     }
     
     fileprivate func setupNavBar() {
@@ -47,16 +47,24 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         tableView.separatorStyle = .none
     }
     
-    fileprivate func setupNewTaskViewModelObserver() {
+    fileprivate func setupNewTaskViewModelObservers() {
         newTaskViewModel.isValidObserver = { (isValid) in
             print(isValid)
             self.navigationItem.rightBarButtonItem?.isEnabled = isValid
             self.navigationItem.rightBarButtonItem?.customView?.backgroundColor = isValid ? .systemBlue : .lightGray
         }
+        newTaskViewModel.isSavedObserver = { (isSaved) in
+            print(isSaved)
+            let indexPath = IndexPath(row: (self.tableView.numberOfRows(inSection: 0) - 1), section: 0)
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+            cell.textLabel?.isHidden = false
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+            self.navigationItem.rightBarButtonItem?.customView?.backgroundColor = .lightGray
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -73,12 +81,19 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
             cell.textField.placeholder = "Obowiązkowe"
             cell.delegate = self
             return cell
-        default:
+        case 2:
             let cell = PickerTextFieldTableViewCell(style: .default, reuseIdentifier: nil)
             cell.titleLabel.text = "Kategoria"
             cell.textField.placeholder = "Obowiązkowe"
             cell.delegate = self
             cell.items = categories
+            return cell
+        default:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "Successfully added"
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+            cell.textLabel?.textColor = .systemGreen
+            cell.textLabel?.isHidden = true
             return cell
         }
     }
@@ -96,8 +111,6 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
     }
     
     @objc fileprivate func handleSave() {
-        print("Time to save!")
-        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         
@@ -109,14 +122,28 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         
         do {
             try managedContext.save()
-            print("Successfully saved!")
-            dismiss(animated: true) { [weak self] in
-                self?.delegate?.refreshTasks()
+
+            newTaskViewModel.isSavedObserver?(true)
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.dismiss(animated: true) { [weak self] in
+                    self?.delegate?.refreshTasks()
+                }
             }
         } catch {
-            // TO-DO: handle error
-            print("Failed to save!")
+            showErrorAlert()
         }
+    }
+    
+    fileprivate func showErrorAlert() {
+        let alertController = UIAlertController(title: "Nie udało się zapisać", message: nil, preferredStyle: .alert)
+        
+        alertController.addAction(.init(title: "Ok", style: .cancel))
+        alertController.addAction(.init(title: "Powtórz", style: .default, handler: { _ in
+            self.handleSave()
+        }))
+        
+        self.present(alertController, animated: true)
     }
     
     @objc fileprivate func handleDismiss() {

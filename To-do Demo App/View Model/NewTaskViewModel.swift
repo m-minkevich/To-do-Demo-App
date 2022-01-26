@@ -15,9 +15,16 @@ class NewTaskViewModel {
     
     var isValidObserver: ((Bool) -> ())?
     
+    var isSaved: Bool = false
+    var isSavedObserver: ((Bool) -> ())?
+    
     fileprivate func checkValidity() {
         let isValid = title?.isEmpty == false && category?.isEmpty == false && date != nil
         isValidObserver?(isValid)
     }
+    
+//    fileprivate func setSavedObserver() {
+//        
+//    }
     
 }
