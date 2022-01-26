@@ -8,21 +8,61 @@
 import UIKit
 import CoreData
 
-class TasksListController: UITableViewController, RefreshTasksDelegate {
+class TasksListController: UIViewController, UITableViewDelegate, UITableViewDataSource, RefreshTasksDelegate {
     
-    fileprivate var taskViewModels = [TaskViewModel]()
+    fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
+    
+    fileprivate var taskViewModels = [TaskViewModel]() { didSet { checkNumberOfTaskViewModels() } }
     
     fileprivate let cellId = "cellId"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Dodaj", style: .plain, target: self, action: #selector(handleAddTask))
-        
-        tableView.register(TaskTableViewCell.self, forCellReuseIdentifier: cellId)
-        
+        setupNavBar()
+        setupAddButton()
+        setupTableView()
+        setupNoTasksLabel()
         fetchTasks()
+    }
+    
+    fileprivate func setupNavBar() {
+        navigationItem.title = "Twoje zadania"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always // ????
+    }
+    
+    fileprivate func setupAddButton() {
+        let saveButton = UIButton(title: "Dodaj")
+        saveButton.addTarget(self, action: #selector(handleAddTask), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
+    }
+    
+    fileprivate let noTasksLabel = UILabel()
+    
+    fileprivate func setupNoTasksLabel() {
+        noTasksLabel.text = "Nie masz jeszcze żadnego zadania.\nMasz łatwe życie! :)"
+        noTasksLabel.numberOfLines = 0
+        noTasksLabel.textAlignment = .center
+        noTasksLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        view.addSubview(noTasksLabel)
+        noTasksLabel.centerInSuperview()
+    }
+    
+    fileprivate func checkNumberOfTaskViewModels() {
+        let isEmpty = taskViewModels.count == 0
+        noTasksLabel.isHidden = !isEmpty
+        tableView.isScrollEnabled = !isEmpty
+    }
+    
+    fileprivate func setupTableView() {
+        view.addSubview(tableView)
+        tableView.fillSuperview()
+        tableView.insetsContentViewsToSafeArea = true
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(TaskTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
     @objc fileprivate func handleAddTask() {
@@ -34,21 +74,21 @@ class TasksListController: UITableViewController, RefreshTasksDelegate {
         present(navController, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskViewModels.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = TaskTableViewCell(style: .subtitle, reuseIdentifier: cellId)
         cell.taskViewModel = taskViewModels[indexPath.row]
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let contextItem = UIContextualAction(style: .destructive, title: "Usuń") {  [weak self] (contextualAction, view, boolValue) in
             self?.deleteTask(indexPath: indexPath)
         }

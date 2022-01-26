@@ -15,17 +15,17 @@ public class Task: NSManagedObject {
 
     func toTaskViewModel() -> TaskViewModel {
         var categoryColor: UIColor
-        var categoryImage: UIImage
+        var categoryImage: UIImage?
         switch category {
         case "Zakupy":
-            categoryColor = .systemBlue
-            categoryImage = UIImage(named: "Desk.fill") ?? UIImage()
-        case "Praca":
             categoryColor = .systemGreen
-            categoryImage = UIImage(named: "Desk.fill") ?? UIImage()
+            categoryImage = UIImage(named: "bag.fill")
+        case "Praca":
+            categoryColor = .systemBlue
+            categoryImage = UIImage(named: "desk.fill")
         default:
             categoryColor = .systemPink
-            categoryImage = UIImage(named: "Desk.fill") ?? UIImage()
+            categoryImage = nil
         }
         
         let formattedDate = formatDate(date: date ?? Date())

@@ -25,6 +25,8 @@ class DatePickerTextFieldTableViewCell: TextFieldTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        
         textField.inputView = datePicker
         
         datePicker.addTarget(self, action: #selector(handleDateChange), for: .valueChanged)

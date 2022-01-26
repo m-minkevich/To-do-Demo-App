@@ -9,6 +9,13 @@ import UIKit
 
 class TextFieldTableViewCell: UITableViewCell {
     
+    let titleLabel: UILabel = {
+        let l = UILabel()
+        l.text = "Title"
+        l.font = UIFont.boldSystemFont(ofSize: 18)
+        return l
+    }()
+    
     let textField: CustomTextField = {
         let tf = CustomTextField()
         tf.placeholder = "Placeholder"
@@ -17,8 +24,14 @@ class TextFieldTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(textField)
-        textField.fillSuperview()
+        selectionStyle = .none
+        
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, textField])
+        stackView.axis = .vertical
+        stackView.spacing = 12
+        
+        contentView.addSubview(stackView)
+        stackView.fillSuperview(padding: .init(top: 12, left: 16, bottom: 12, right: 16))
     }
     
     required init?(coder: NSCoder) {

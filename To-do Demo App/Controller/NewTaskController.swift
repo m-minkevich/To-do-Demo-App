@@ -22,63 +22,60 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = .yellow
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Anuluj", style: .done, target: self, action: #selector(handleDismiss))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Zapisz", style: .plain, target: self, action: #selector(handleSave))
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        
+        setupNavBar()
+        setupNavButtons()
+        setupTableView()
         setupNewTaskViewModelObserver()
+    }
+    
+    fileprivate func setupNavBar() {
+        navigationItem.title = "Nowe zadanie"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always // ????
+    }
+    
+    fileprivate func setupNavButtons() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Anuluj", style: .done, target: self, action: #selector(handleDismiss))
+        
+        let saveButton = UIButton(title: "Dodaj", backgroundColor: .lightGray)
+        saveButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    
+    fileprivate func setupTableView() {
+        tableView.separatorStyle = .none
     }
     
     fileprivate func setupNewTaskViewModelObserver() {
         newTaskViewModel.isValidObserver = { (isValid) in
             print(isValid)
             self.navigationItem.rightBarButtonItem?.isEnabled = isValid
+            self.navigationItem.rightBarButtonItem?.customView?.backgroundColor = isValid ? .systemBlue : .lightGray
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let l = UILabel()
-        switch section {
-        case 0:
-            l.text = "Nazwa"
-        case 1:
-            l.text = "Data wykonania"
-        default:
-            l.text = "Kategoria"
-        }
-        return l
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
+        switch indexPath.row {
         case 0:
             let cell = TextFieldTableViewCell(style: .default, reuseIdentifier: nil)
+            cell.titleLabel.text = "Nazwa"
             cell.textField.placeholder = "Obowiązkowe"
             cell.textField.addTarget(self, action: #selector(handleTitleChange), for: .editingChanged)
             return cell
         case 1:
             let cell = DatePickerTextFieldTableViewCell(style: .default, reuseIdentifier: nil)
-            cell.backgroundColor = .red
+            cell.titleLabel.text = "Data wykonania"
             cell.textField.placeholder = "Obowiązkowe"
             cell.delegate = self
             return cell
         default:
             let cell = PickerTextFieldTableViewCell(style: .default, reuseIdentifier: nil)
-            cell.backgroundColor = .green
+            cell.titleLabel.text = "Kategoria"
             cell.textField.placeholder = "Obowiązkowe"
             cell.delegate = self
             cell.items = categories
@@ -126,8 +123,6 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         dismiss(animated: true)
     }
     
+    
 }
-
-
-
 

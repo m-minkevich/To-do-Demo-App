@@ -21,6 +21,8 @@ class PickerTextFieldTableViewCell: TextFieldTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        
         textField.inputView = picker
         
         picker.delegate = self
