@@ -148,24 +148,15 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     fileprivate func deleteTask(indexPath: IndexPath) {
-        print("Delete at: ", indexPath)
-//        Delete by id???
-////        let task = tasks[indexPath.row]
-//        let taskViewModel = taskViewModels[indexPath.row]
-//
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        let managedContext = appDelegate.persistentContainer.viewContext
-//
-//        managedContext.delete(taskViewModel)
-//        taskViewModels.remove(at: indexPath.row)
-//        appDelegate.saveContext()
-//
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//        }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
         
+        let task = groupedTaskViewModels[indexPath.section][indexPath.row].task
+
+        managedContext.delete(task)
         groupedTaskViewModels[indexPath.section].remove(at: indexPath.row)
-//        taskViewModels.remove(at: indexPath.row)
+        appDelegate.saveContext()
+        
         tableView.deleteRows(at: [indexPath], with: .automatic)
         
     }

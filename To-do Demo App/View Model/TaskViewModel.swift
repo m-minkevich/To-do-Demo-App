@@ -13,5 +13,7 @@ struct TaskViewModel {
     let categoryColor: UIColor
     let categoryImage: UIImage?
     
+    let task: Task
+    
     
 }
