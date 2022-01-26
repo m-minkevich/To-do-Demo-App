@@ -20,7 +20,7 @@ class TaskTableViewCell: UITableViewCell {
                 categoryImage.isHidden = true
             }
             
-            titleLabel.text = taskViewModel?.title
+            titleLabel.text = "\(taskViewModel?.title ?? "") · \(taskViewModel?.time ?? "")"
             categoryLabel.text = taskViewModel?.category
             dateLabel.text = taskViewModel?.date
         }

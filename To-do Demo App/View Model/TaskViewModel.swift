@@ -9,7 +9,7 @@ import UIKit
 
 struct TaskViewModel {
     
-    let title, date, category: String
+    let title, date, time, category: String
     let categoryColor: UIColor
     let categoryImage: UIImage?
     

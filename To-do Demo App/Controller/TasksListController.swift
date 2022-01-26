@@ -12,7 +12,9 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
     
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
     
-    fileprivate var taskViewModels = [TaskViewModel]() { didSet { checkNumberOfTaskViewModels() } }
+//    fileprivate var taskViewModels = [TaskViewModel]() { didSet { checkNumberOfTaskViewModels() } }
+    
+    fileprivate var groupedTaskViewModels = [[TaskViewModel]]() { didSet { checkNumberOfTaskViewModels() } }
     
     fileprivate let cellId = "cellId"
 
@@ -23,6 +25,7 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         setupTableView()
         setupNoTasksLabel()
         fetchTasks()
+//        deleteAllData()
     }
     
     fileprivate func setupNavBar() {
@@ -50,7 +53,7 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     fileprivate func checkNumberOfTaskViewModels() {
-        let isEmpty = taskViewModels.count == 0
+        let isEmpty = groupedTaskViewModels.count == 0
         noTasksLabel.isHidden = !isEmpty
         tableView.isScrollEnabled = !isEmpty
     }
@@ -74,13 +77,22 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         present(navController, animated: true)
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return groupedTaskViewModels.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let firstTaskViewModel = groupedTaskViewModels[section].first
+        return firstTaskViewModel?.date
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskViewModels.count
+        return groupedTaskViewModels[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = TaskTableViewCell(style: .subtitle, reuseIdentifier: cellId)
-        cell.taskViewModel = taskViewModels[indexPath.row]
+        cell.taskViewModel = groupedTaskViewModels[indexPath.section][indexPath.row]
         return cell
     }
     
@@ -108,7 +120,9 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         let request: NSFetchRequest<Task> = Task.fetchRequest()
         
         do {
-            taskViewModels = try managedContext.fetch(request).map({ $0.toTaskViewModel() })
+            let tasks = try managedContext.fetch(request)
+            groupedTaskViewModels = convertToGroupedViewModels(tasks: tasks)
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -116,6 +130,21 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
             // TO-DO: handle error
             print("Failed to fetch!")
         }
+    }
+    
+    fileprivate func convertToGroupedViewModels(tasks: [Task]) -> [[TaskViewModel]] {
+        let groupedTasks = Dictionary(grouping: tasks) { (element) -> Date in
+            return element.date.excludeTime()
+        }
+        let sortedKeys = groupedTasks.keys.sorted()
+        
+        var groupedViewModels = [[TaskViewModel]]()
+        sortedKeys.forEach { (key) in
+            let tasksArray = groupedTasks[key]?.sorted(by: { $0.date < $1.date })
+            let taskViewModelsArray = tasksArray?.map({$0.toTaskViewModel()})
+            groupedViewModels.append(taskViewModelsArray ?? [])
+        }
+        return groupedViewModels
     }
     
     fileprivate func deleteTask(indexPath: IndexPath) {
@@ -135,11 +164,37 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
 //            self.tableView.reloadData()
 //        }
         
-        taskViewModels.remove(at: indexPath.row)
+        groupedTaskViewModels[indexPath.section].remove(at: indexPath.row)
+//        taskViewModels.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         
     }
+    
+    
+    func deleteAllData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request: NSFetchRequest<Task> = Task.fetchRequest()
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        request.returnsObjectsAsFaults = false
+        do {
+//            let results = try dataController.viewContext.fetch(fetchRequest)
+            let tasks = try managedContext.fetch(request)
+            for t in tasks {
+//                guard let objectData = t as? NSManagedObject else {continue}
+//                dataController.viewContext.delete(objectData)
+                managedContext.delete(t)
+            }
+            appDelegate.saveContext()
+        } catch let error {
+            print("Detele all data in ... error :", error)
+        }
+    }
+    
+    
 
 
 }
+
 

@@ -103,9 +103,9 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         
         guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: managedContext) else { return }
         let task = Task(entity: entity, insertInto: managedContext)
-        task.title = newTaskViewModel.title
-        task.category = newTaskViewModel.category
-        task.date = newTaskViewModel.date
+        task.title = newTaskViewModel.title ?? ""
+        task.category = newTaskViewModel.category ?? ""
+        task.date = newTaskViewModel.date ?? Date()
         
         do {
             try managedContext.save()
