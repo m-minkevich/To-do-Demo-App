@@ -31,7 +31,7 @@ class TextFieldTableViewCell: UITableViewCell {
         stackView.spacing = 12
         
         contentView.addSubview(stackView)
-        stackView.fillSuperview(padding: .init(top: 12, left: 16, bottom: 12, right: 16))
+        stackView.fillSuperview(padding: .init(top: 12, left: 17, bottom: 12, right: 17))
     }
     
     required init?(coder: NSCoder) {

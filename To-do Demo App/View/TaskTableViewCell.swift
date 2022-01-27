@@ -20,9 +20,11 @@ class TaskTableViewCell: UITableViewCell {
                 categoryImage.isHidden = true
             }
             
-            titleLabel.text = "\(taskViewModel?.title ?? "") · \(taskViewModel?.time ?? "")"
+            let attributedString = NSMutableAttributedString(string: taskViewModel?.title ?? "", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold)])
+            attributedString.append(NSAttributedString(string: " · \(taskViewModel?.time ?? "")", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.darkGray]))
+            
+            titleLabel.attributedText = attributedString
             categoryLabel.text = taskViewModel?.category
-            dateLabel.text = taskViewModel?.date
         }
     }
     
@@ -47,7 +49,7 @@ class TaskTableViewCell: UITableViewCell {
     fileprivate let categoryImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.heightAnchor.constraint(equalToConstant: 32).isActive = true // 36
+        iv.heightAnchor.constraint(equalToConstant: 32).isActive = true
         iv.widthAnchor.constraint(equalToConstant: 32).isActive = true
         return iv
     }()
@@ -60,33 +62,13 @@ class TaskTableViewCell: UITableViewCell {
         return l
     }()
     
-    fileprivate let dateLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Date"
-        l.textAlignment = .right
-        l.textColor = .darkGray
-        l.font = .italicSystemFont(ofSize: 15)
-        return l
-    }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
-
-        let labelsStackView = UIStackView(arrangedSubviews: [
-//            dateLabel,
-            titleLabel
-//            UIView()
-        ])
-        labelsStackView.axis = .vertical
-        labelsStackView.spacing = 6
         
-        
-
         let overallStackView = UIStackView(arrangedSubviews: [
             categoryBuble,
-            labelsStackView
-//            titleLabel
+            titleLabel
         ])
         overallStackView.alignment = .center
         overallStackView.spacing = 16
@@ -101,16 +83,11 @@ class TaskTableViewCell: UITableViewCell {
 
         categoryBuble.addSubview(categoryStackView)
         categoryStackView.fillSuperview(padding: .init(top: 8, left: 8, bottom: 8, right: 8))
-        
-        
-        let customSeparatorView = UIView()
-        customSeparatorView.backgroundColor = .lightGray
-        addSubview(customSeparatorView)
-        // leftPadding[16] + categoryBubble[72] + overallStackViewSpacing[16]
-        customSeparatorView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 104, bottom: 0, right: 0), size: .init(width: 0, height: 0.5))
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
 }

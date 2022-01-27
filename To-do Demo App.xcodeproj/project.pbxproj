@@ -109,10 +109,7 @@
 		FD61B7ED27996C9B00C63F7A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				FD438EA3279973B800C36497 /* CustomTextField.swift */,
-				FD438EA02799727400C36497 /* TextFieldTableViewCell.swift */,
-				FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */,
-				FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */,
+				FD9473BD27A2B51A003469C7 /* New task */,
 				FD9F5160279AE8FA00CF455E /* TaskTableViewCell.swift */,
 			);
 			path = View;
@@ -135,6 +132,17 @@
 				FD4F50B927A16DB300A9B127 /* Date+Extension.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		FD9473BD27A2B51A003469C7 /* New task */ = {
+			isa = PBXGroup;
+			children = (
+				FD438EA3279973B800C36497 /* CustomTextField.swift */,
+				FD438EA02799727400C36497 /* TextFieldTableViewCell.swift */,
+				FD9F515A279AD02800CF455E /* PickerTextFieldTableViewCell.swift */,
+				FD9F515D279AD14D00CF455E /* DatePickerTextFieldTableViewCell.swift */,
+			);
+			path = "New task";
 			sourceTree = "<group>";
 		};
 		FD9F5163279CBADA00CF455E /* View Model */ = {

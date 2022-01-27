@@ -28,10 +28,12 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         setupNewTaskViewModelObservers()
     }
     
+//    MARK:- Setup Layout
+    
     fileprivate func setupNavBar() {
         navigationItem.title = "Nowe zadanie"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always // ????
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     fileprivate func setupNavButtons() {
@@ -48,13 +50,12 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
     }
     
     fileprivate func setupNewTaskViewModelObservers() {
-        newTaskViewModel.isValidObserver = { (isValid) in
-            print(isValid)
-            self.navigationItem.rightBarButtonItem?.isEnabled = isValid
-            self.navigationItem.rightBarButtonItem?.customView?.backgroundColor = isValid ? .systemBlue : .lightGray
+        newTaskViewModel.isValidObserver = { [weak self] (isValid) in
+            self?.navigationItem.rightBarButtonItem?.isEnabled = isValid
+            self?.navigationItem.rightBarButtonItem?.customView?.backgroundColor = isValid ? .systemBlue : .lightGray
         }
-        newTaskViewModel.isSavedObserver = { (isSaved) in
-            print(isSaved)
+        newTaskViewModel.isSavedObserver = { [weak self] (isSaved) in
+            guard let self = self else { return }
             let indexPath = IndexPath(row: (self.tableView.numberOfRows(inSection: 0) - 1), section: 0)
             guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
             cell.textLabel?.isHidden = false
@@ -62,6 +63,8 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
             self.navigationItem.rightBarButtonItem?.customView?.backgroundColor = .lightGray
         }
     }
+    
+//    MARK:- Delegate and DataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
@@ -90,6 +93,7 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
             return cell
         default:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.selectionStyle = .none
             cell.textLabel?.text = "Successfully added"
             cell.textLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             cell.textLabel?.textColor = .systemGreen
@@ -97,6 +101,8 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
             return cell
         }
     }
+    
+//    MARK:- Handlers and delegate methods
     
     @objc fileprivate func handleTitleChange(textField: UITextField) {
         newTaskViewModel.title = textField.text ?? ""
@@ -109,6 +115,8 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
     func didSelectItem(_ item: String) {
         newTaskViewModel.category = item
     }
+    
+//    MARK:- Save task
     
     @objc fileprivate func handleSave() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -135,6 +143,8 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         }
     }
     
+//    MARK:- Error handling
+    
     fileprivate func showErrorAlert() {
         let alertController = UIAlertController(title: "Nie udało się zapisać", message: nil, preferredStyle: .alert)
         
@@ -145,6 +155,8 @@ class NewTaskController: UITableViewController, DatePickerDelegate, PickerDelega
         
         self.present(alertController, animated: true)
     }
+    
+//    MARK:- Navigation
     
     @objc fileprivate func handleDismiss() {
         dismiss(animated: true)

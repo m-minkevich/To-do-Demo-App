@@ -11,6 +11,7 @@ import CoreData
 class TasksListController: UIViewController, UITableViewDelegate, UITableViewDataSource, RefreshTasksDelegate {
     
     fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
+    fileprivate let noTasksLabel = UILabel()
     
     fileprivate var groupedTaskViewModels = [[TaskViewModel]]() { didSet { checkNumberOfTaskViewModels() } }
     
@@ -25,10 +26,12 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         fetchTasks()
     }
     
+//    MARK:- Setup Layout
+    
     fileprivate func setupNavBar() {
         navigationItem.title = "Twoje zadania"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always // ????
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     fileprivate func setupAddButton() {
@@ -36,8 +39,6 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         saveButton.addTarget(self, action: #selector(handleAddTask), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
     }
-    
-    fileprivate let noTasksLabel = UILabel()
     
     fileprivate func setupNoTasksLabel() {
         noTasksLabel.text = "Nie masz jeszcze żadnego zadania.\nMasz łatwe życie! :)"
@@ -65,14 +66,7 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.register(TaskTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
-    @objc fileprivate func handleAddTask() {
-        let newTaskController = NewTaskController()
-        newTaskController.delegate = self
-        let navController = UINavigationController(rootViewController: newTaskController)
-        navController.modalPresentationStyle = .fullScreen
-        
-        present(navController, animated: true)
-    }
+//    MARK:- Delegate and DataSource
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return groupedTaskViewModels.count
@@ -93,6 +87,8 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
     
+//    MARK:- Delete using swipe
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -108,6 +104,19 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
 
         return swipeConfig
     }
+    
+//    MARK:- Navigation
+    
+    @objc fileprivate func handleAddTask() {
+        let newTaskController = NewTaskController()
+        newTaskController.delegate = self
+        let navController = UINavigationController(rootViewController: newTaskController)
+        navController.modalPresentationStyle = .fullScreen
+        
+        present(navController, animated: true)
+    }
+    
+//    MARK: - Fetch tasks
     
     func refreshTasks() {
         fetchTasks()
@@ -146,6 +155,8 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
         return groupedViewModels
     }
     
+//    MARK:- Delete task
+    
     fileprivate func handleDeleteTask(indexPath: IndexPath) {
         let alertController = UIAlertController(title: "Na pewno chcesz usunąć?", message: nil, preferredStyle: .alert)
         
@@ -167,11 +178,21 @@ class TasksListController: UIViewController, UITableViewDelegate, UITableViewDat
 
         managedContext.delete(task)
         groupedTaskViewModels[indexPath.section].remove(at: indexPath.row)
+
         appDelegate.saveContext()
         
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
+        
+        if groupedTaskViewModels[indexPath.section].count == 0 {
+            groupedTaskViewModels.remove(at: indexPath.section)
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
     }
+    
+//    MARK:- Error handling
     
     fileprivate func showErrorAlert() {
         let alertController = UIAlertController(title: "Nie udało się pobrać", message: nil, preferredStyle: .alert)

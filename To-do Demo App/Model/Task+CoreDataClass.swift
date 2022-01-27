@@ -28,7 +28,7 @@ public class Task: NSManagedObject {
             categoryImage = nil
         }
         
-        let formattedDate = date.string()
+        let formattedDate = date.dateString()
         let formattedTime = date.timeString()
         
         return TaskViewModel(title: title, date: formattedDate, time: formattedTime, category: category, categoryColor: categoryColor, categoryImage: categoryImage, task: self)

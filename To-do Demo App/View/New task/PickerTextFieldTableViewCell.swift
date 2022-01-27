@@ -23,6 +23,7 @@ class PickerTextFieldTableViewCell: TextFieldTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         
+        textField.tintColor = .clear
         textField.inputView = picker
         
         picker.delegate = self
@@ -44,7 +45,14 @@ class PickerTextFieldTableViewCell: TextFieldTableViewCell {
     }
     
     @objc fileprivate func handleDismiss() {
+        let row = picker.selectedRow(inComponent: 0)
+        selectItem(at: row)
         textField.resignFirstResponder()
+    }
+    
+    fileprivate func selectItem(at row: Int) {
+        textField.text = items[row]
+        delegate?.didSelectItem(items[row])
     }
     
     required init?(coder: NSCoder) {
@@ -69,9 +77,7 @@ extension PickerTextFieldTableViewCell: UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(row)
-        textField.text = items[row]
-        delegate?.didSelectItem(items[row])
+        selectItem(at: row)
     }
     
 }

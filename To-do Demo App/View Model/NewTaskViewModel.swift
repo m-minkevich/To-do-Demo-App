@@ -23,8 +23,4 @@ class NewTaskViewModel {
         isValidObserver?(isValid)
     }
     
-//    fileprivate func setSavedObserver() {
-//        
-//    }
-    
 }

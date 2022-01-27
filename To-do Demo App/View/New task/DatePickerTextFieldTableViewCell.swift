@@ -27,6 +27,7 @@ class DatePickerTextFieldTableViewCell: TextFieldTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         
+        textField.tintColor = .clear
         textField.inputView = datePicker
         
         datePicker.addTarget(self, action: #selector(handleDateChange), for: .valueChanged)
@@ -47,12 +48,17 @@ class DatePickerTextFieldTableViewCell: TextFieldTableViewCell {
     }
     
     @objc fileprivate func handleDateChange() {
-        textField.text = "\(datePicker.date)"
-        delegate?.didSelectDate(datePicker.date)
+        selectDate(date: datePicker.date)
     }
     
     @objc fileprivate func handleDismiss() {
+        selectDate(date: datePicker.date)
         textField.resignFirstResponder()
+    }
+    
+    fileprivate func selectDate(date: Date) {
+        textField.text = "\(date.dateString()) (\(date.timeString()))"
+        delegate?.didSelectDate(date)
     }
     
     required init?(coder: NSCoder) {
